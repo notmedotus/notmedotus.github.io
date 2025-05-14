@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>One Third Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Load Lato (normal weight) for the tagline -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* reset & full-screen */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: #d2b48c;
+    }
+    /* noise overlay */
+    #bg-noise {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+    /* fraction logo */
+    .logo {
+      width: 40vw;
+      max-width: 300px;
+      height: auto;
+    }
+    /* revert tagline to original size & weight */
+    .tagline {
+      margin-top: 1rem;
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      font-size: 1.5rem;
+      color: #222;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <!-- subtle noise filter -->
+  <svg id="bg-noise" xmlns="http://www.w3.org/2000/svg">
+    <filter id="noiseFilter">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.9"
+        numOctaves="3"
+        stitchTiles="stitch"
+      />
+      <feColorMatrix type="saturate" values="0" />
+      <feComposite in2="SourceGraphic" operator="in" />
+    </filter>
+    <rect
+      width="100%"
+      height="100%"
+      fill="#d2b48c"
+      filter="url(#noiseFilter)"
+    />
+  </svg>
+
+  <div class="container">
+    <!-- official ⅓ glyph from Wikimedia -->
+    <img
+      class="logo"
+      src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
+      alt="⅓"
+    />
+
+    <!-- reverted tagline -->
+    <div class="tagline">One Third Party</div>
+  </div>
+</body>
+</html>
