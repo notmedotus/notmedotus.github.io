@@ -12,7 +12,7 @@
     rel="stylesheet"
   />
   <style>
-    /* reset & full-screen */
+    /* reset & full-viewport */
     * {
       margin: 0;
       padding: 0;
@@ -27,7 +27,7 @@
     body {
       background: #d2b48c;
     }
-    /* noise overlay */
+    /* subtle noise overlay */
     #bg-noise {
       position: absolute;
       top: 0;
@@ -45,13 +45,13 @@
       height: 100%;
       text-align: center;
     }
-    /* fraction logo */
+    /* fraction logo—made larger */
     .logo {
-      width: 40vw;
-      max-width: 300px;
+      width: 60vw;        /* up from 40vw */
+      max-width: 500px;   /* up from 300px */
       height: auto;
     }
-    /* revert tagline to original size & weight */
+    /* tagline unchanged */
     .tagline {
       margin-top: 1rem;
       font-family: 'Lato', sans-serif;
@@ -64,7 +64,7 @@
   </style>
 </head>
 <body>
-  <!-- subtle noise filter -->
+  <!-- noise filter -->
   <svg id="bg-noise" xmlns="http://www.w3.org/2000/svg">
     <filter id="noiseFilter">
       <feTurbulence
@@ -85,14 +85,13 @@
   </svg>
 
   <div class="container">
-    <!-- official ⅓ glyph from Wikimedia -->
+    <!-- official ⅓ glyph, now larger -->
     <img
       class="logo"
       src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
       alt="⅓"
     />
 
-    <!-- reverted tagline -->
     <div class="tagline">One Third Party</div>
   </div>
 </body>
