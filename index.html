@@ -4,95 +4,111 @@
   <meta charset="UTF-8" />
   <title>One Third Party</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Load Lato (normal weight) for the tagline -->
+  <!-- Lato for tagline -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap"
     rel="stylesheet"
   />
   <style>
-    /* reset & full-viewport */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box }
     html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+      width:100%; height:100%; overflow-x:hidden;
       font-family: Arial, sans-serif;
-    }
-    body {
       background: #d2b48c;
     }
-    /* subtle noise overlay */
-    #bg-noise {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
+    /* first‐screen */
+    .hero {
+      height:100vh;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center;
+      position: relative;
     }
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      text-align: center;
+    .hero img {
+      width:60vw; max-width:500px; height:auto;
     }
-    /* fraction logo—made larger */
-    .logo {
-      width: 60vw;        /* up from 40vw */
-      max-width: 500px;   /* up from 300px */
-      height: auto;
+    .hero .tagline {
+      margin-top:1rem;
+      font-family:'Lato',sans-serif;
+      font-weight:400;
+      font-size:1.5rem;
+      color:#222;
+      letter-spacing:2px;
+      text-transform:uppercase;
     }
-    /* tagline unchanged */
-    .tagline {
-      margin-top: 1rem;
-      font-family: 'Lato', sans-serif;
-      font-weight: 400;
-      font-size: 1.5rem;
-      color: #222;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+    /* scroll‐into section */
+    .content {
+      padding:4rem 1rem;
+      max-width:600px;
+      margin:0 auto;
+      line-height:1.5;
+      font-size:1rem;
+      color:#222;
+    }
+    .content p em { font-style:italic; }
+    .content p strong { font-weight:bold; }
+    /* signup form */
+    .signup {
+      margin-top:2rem;
+      display:flex;
+      justify-content:center;
+    }
+    .signup input[type="email"] {
+      flex:1;
+      max-width:300px;
+      padding:0.75rem 1.5rem;
+      border:none;
+      border-radius:999px;
+      background:#d2b48c;
+      box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1),
+                  inset -2px -2px 5px rgba(255,255,255,0.7);
+      font-size:1rem;
+      color:#000;
+    }
+    .signup button {
+      margin-left:1rem;
+      padding:0.75rem 1.5rem;
+      border:none;
+      border-radius:999px;
+      background:#000;
+      color:#fff;
+      font-family:'Lato',sans-serif;
+      font-weight:900;
+      cursor:pointer;
+      font-size:1rem;
     }
   </style>
 </head>
 <body>
-  <!-- noise filter -->
-  <svg id="bg-noise" xmlns="http://www.w3.org/2000/svg">
-    <filter id="noiseFilter">
-      <feTurbulence
-        type="fractalNoise"
-        baseFrequency="0.9"
-        numOctaves="3"
-        stitchTiles="stitch"
-      />
-      <feColorMatrix type="saturate" values="0" />
-      <feComposite in2="SourceGraphic" operator="in" />
-    </filter>
-    <rect
-      width="100%"
-      height="100%"
-      fill="#d2b48c"
-      filter="url(#noiseFilter)"
-    />
-  </svg>
-
-  <div class="container">
-    <!-- official ⅓ glyph, now larger -->
+  <section class="hero">
+    <!-- official ⅓ glyph -->
     <img
-      class="logo"
       src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
       alt="⅓"
     />
-
     <div class="tagline">One Third Party</div>
-  </div>
+  </section>
+
+  <section class="content">
+    <p>
+      There are <strong>approximately 228,847,506</strong> voting-eligible
+      Americans today. To *break* the entrenched two-party system, we’d need
+      just a simple plurality—that’s <strong>46,374,188</strong> votes
+      (<em>one-third plus one</em> of the average turnout). Meanwhile,
+      on average <strong>89,724,946</strong> eligible voters didn’t cast
+      a ballot. We just need to figure out what we can agree on.
+    </p>
+
+    <form class="signup">
+      <input
+        type="email"
+        placeholder="Your email address"
+        required
+      />
+      <button type="submit">Join</button>
+    </form>
+  </section>
 </body>
 </html>
