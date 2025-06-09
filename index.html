@@ -88,17 +88,22 @@
     <filter id="noiseFilter">
       <feTurbulence
         type="fractalNoise"
-        baseFrequency="0.9"
-        numOctaves="3"
+        baseFrequency="0.8"
+        numOctaves="2"
         stitchTiles="stitch"
       />
-      <feColorMatrix type="saturate" values="0" />
-      <feBlend mode="multiply" in2="SourceGraphic" />
+      <feColorMatrix
+        type="matrix"
+        values="0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0.2 0"
+      />
     </filter>
     <rect
       width="100%"
       height="100%"
-      fill="#d2b48c" /* Matches the base background color */
+      fill="#d2b48c"
       filter="url(#noiseFilter)"
     />
   </svg>
