@@ -5,14 +5,14 @@
     <title>One Third Party</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Favicon using SVG with the Unicode glyph -->
+    <!-- Favicon with the ⅓ glyph -->
     <link
       rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'48\'>⅓</text></svg>"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-size=\"48\">⅓</text></svg>"
       type="image/svg+xml"
     />
 
-    <!-- Load Lato (normal weight) for the tagline -->
+    <!-- Lato for the taglines -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,8 +21,10 @@
     />
 
     <style>
-      /* Reset & full-viewport */
-      * {
+      /* --- basic reset & page setup --- */
+      *,
+      *::before,
+      *::after {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -37,32 +39,24 @@
         background: #d2b48c;
       }
 
-      body {
-        position: relative;
-      }
-
-      /* Subtle noise overlay */
+      /* background noise layer */
       #bg-noise {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         z-index: -1;
       }
 
+      /* outer flex wrapper */
       .container {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 100%;
         height: 100%;
         text-align: center;
-        padding: 5vh 0;
       }
 
-      /* Fraction logo */
+      /* --- logo --- */
       .logo {
         width: 60vw;
         max-width: 500px;
@@ -76,31 +70,42 @@
         }
       }
 
-      /* Base tagline style (original size) */
+      /* --- tagline styles --- */
       .tagline {
-        margin-top: 0.5rem; /* reduced space between ⅓ and text */
         font-family: "Lato", sans-serif;
-        font-size: 1.5rem;
         letter-spacing: 2px;
         text-transform: uppercase;
         color: #222;
       }
 
-      /* Primary line: same size, bold */
       .tagline--primary {
-        font-weight: 700;
+        font-size: 1.5rem; /* original size           */
+        font-weight: 700;  /* bold                    */
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        /* no pointer events so it doesn't block clicks/touches */
+        pointer-events: none;
       }
 
-      /* Secondary line: half the size */
       .tagline--sub {
-        font-size: 0.75rem;
-        font-weight: 400;
+        font-size: 0.75rem; /* half of 1.5 rem */
+        margin-top: 1rem;   /* ↔ distance from logo stays ~same */
+      }
+
+      /* wrapper that the absolute element will use for centering */
+      .stack {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
       }
     </style>
   </head>
 
   <body>
-    <!-- Noise filter -->
+    <!-- noise filter -->
     <svg id="bg-noise" xmlns="http://www.w3.org/2000/svg">
       <filter id="noiseFilter">
         <feTurbulence
@@ -117,26 +122,25 @@
                   0 0 0 0.2 0"
         />
       </filter>
-      <rect
-        width="100%"
-        height="100%"
-        fill="#d2b48c"
-        filter="url(#noiseFilter)"
-      />
+      <rect width="100%" height="100%" fill="#d2b48c" filter="url(#noiseFilter)" />
     </svg>
 
     <div class="container">
-      <img
-        class="logo"
-        src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
-        alt="⅓"
-      />
+      <div class="stack">
+        <!-- ⅓ logo -->
+        <img
+          class="logo"
+          src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
+          alt="⅓"
+        />
 
-      <!-- Primary tagline -->
-      <div class="tagline tagline--primary">One Third Party</div>
-      <!-- Secondary tagline -->
-      <div class="tagline tagline--sub">
-        A Plurality for Peace and Justice
+        <!-- centered primary tagline -->
+        <div class="tagline tagline--primary">One Third Party</div>
+
+        <!-- secondary tagline (position in normal flow) -->
+        <div class="tagline tagline--sub">
+          A Plurality for Peace and Justice
+        </div>
       </div>
     </div>
   </body>
