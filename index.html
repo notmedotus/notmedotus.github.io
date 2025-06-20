@@ -5,11 +5,11 @@
     <title>One Third Party</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Favicon (⅓ glyph) -->
+    <!-- favicon: “⅓” rendered from inline SVG -->
     <link
       rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-size=\"48\">⅓</text></svg>"
       type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>⅓</text></svg>"
     />
 
     <!-- Lato font for taglines -->
@@ -54,9 +54,7 @@
         justify-content: center;
         height: 100%;
         text-align: center;
-
-        /* equal spacing between logo, primary & secondary lines */
-        gap: 0.75rem;
+        gap: 0.75rem; /* even spacing between elements */
         padding: 5vh 0;
       }
 
@@ -82,10 +80,10 @@
       }
       .tagline--primary {
         font-size: 1.5rem; /* original size */
-        font-weight: 700;  /* bold        */
+        font-weight: 700; /* bold */
       }
       .tagline--sub {
-        font-size: 0.75rem; /* half size   */
+        font-size: 0.75rem; /* half size */
       }
     </style>
   </head>
@@ -108,7 +106,12 @@
                   0 0 0 0.2 0"
         />
       </filter>
-      <rect width="100%" height="100%" fill="#d2b48c" filter="url(#noiseFilter)" />
+      <rect
+        width="100%"
+        height="100%"
+        fill="#d2b48c"
+        filter="url(#noiseFilter)"
+      />
     </svg>
 
     <div class="container">
@@ -119,11 +122,13 @@
         alt="⅓"
       />
 
-      <!-- primary tagline (now slightly higher due to equal gap) -->
-      <div class="tagline tagline--primary">One Third Party</div>
+      <!-- primary tagline -->
+      <div class="tagline tagline--primary">One&nbsp;Third&nbsp;Party</div>
 
       <!-- secondary tagline -->
-      <div class="tagline tagline--sub">A Plurality for Peace and Justice</div>
+      <div class="tagline tagline--sub">
+        A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice
+      </div>
     </div>
   </body>
 </html>
