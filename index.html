@@ -5,14 +5,14 @@
     <title>One Third Party</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Favicon with the ⅓ glyph -->
+    <!-- Favicon (⅓ glyph) -->
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-size=\"48\">⅓</text></svg>"
       type="image/svg+xml"
     />
 
-    <!-- Lato for the taglines -->
+    <!-- Lato font for taglines -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,7 +21,7 @@
     />
 
     <style>
-      /* --- basic reset & page setup --- */
+      /* ---------- reset & page ---------- */
       *,
       *::before,
       *::after {
@@ -39,14 +39,14 @@
         background: #d2b48c;
       }
 
-      /* background noise layer */
+      /* ---------- noise background -------- */
       #bg-noise {
         position: absolute;
         inset: 0;
         z-index: -1;
       }
 
-      /* outer flex wrapper */
+      /* ---------- main layout ------------ */
       .container {
         display: flex;
         flex-direction: column;
@@ -54,15 +54,18 @@
         justify-content: center;
         height: 100%;
         text-align: center;
+
+        /* equal spacing between logo, primary & secondary lines */
+        gap: 0.75rem;
+        padding: 5vh 0;
       }
 
-      /* --- logo --- */
+      /* logo */
       .logo {
         width: 60vw;
         max-width: 500px;
         height: auto;
       }
-
       @media (min-width: 768px) {
         .logo {
           width: 40vw;
@@ -70,36 +73,19 @@
         }
       }
 
-      /* --- tagline styles --- */
+      /* taglines */
       .tagline {
         font-family: "Lato", sans-serif;
         letter-spacing: 2px;
         text-transform: uppercase;
         color: #222;
       }
-
       .tagline--primary {
-        font-size: 1.5rem; /* original size           */
-        font-weight: 700;  /* bold                    */
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        /* no pointer events so it doesn't block clicks/touches */
-        pointer-events: none;
+        font-size: 1.5rem; /* original size */
+        font-weight: 700;  /* bold        */
       }
-
       .tagline--sub {
-        font-size: 0.75rem; /* half of 1.5 rem */
-        margin-top: 1rem;   /* ↔ distance from logo stays ~same */
-      }
-
-      /* wrapper that the absolute element will use for centering */
-      .stack {
-        position: relative;
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
+        font-size: 0.75rem; /* half size   */
       }
     </style>
   </head>
@@ -126,22 +112,18 @@
     </svg>
 
     <div class="container">
-      <div class="stack">
-        <!-- ⅓ logo -->
-        <img
-          class="logo"
-          src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
-          alt="⅓"
-        />
+      <!-- ⅓ glyph -->
+      <img
+        class="logo"
+        src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
+        alt="⅓"
+      />
 
-        <!-- centered primary tagline -->
-        <div class="tagline tagline--primary">One Third Party</div>
+      <!-- primary tagline (now slightly higher due to equal gap) -->
+      <div class="tagline tagline--primary">One Third Party</div>
 
-        <!-- secondary tagline (position in normal flow) -->
-        <div class="tagline tagline--sub">
-          A Plurality for Peace and Justice
-        </div>
-      </div>
+      <!-- secondary tagline -->
+      <div class="tagline tagline--sub">A Plurality for Peace and Justice</div>
     </div>
   </body>
 </html>
