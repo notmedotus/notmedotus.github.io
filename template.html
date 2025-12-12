@@ -5,23 +5,23 @@
     <title>One Third Party</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- favicon: “⅓” -->
+    <!-- favicon -->
     <link
       rel="icon"
       type="image/svg+xml"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>⅓</text></svg>"
     />
 
-    <!-- fonts -->
+    <!-- Lato font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
 
     <style>
-      /* ---------- Reset ---------- */
+      /* ---------- reset & page ---------- */
       *,
       *::before,
       *::after {
@@ -30,176 +30,573 @@
         box-sizing: border-box;
       }
 
-      html,
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
-        width: 100%;
-        height: 100%;
         font-family: "Lato", sans-serif;
         background: #d2b48c;
         color: #222;
-        overflow-x: hidden;
+        line-height: 1.6;
       }
 
-      /* ---------- Background Noise ---------- */
+      /* ---------- noise background -------- */
       #bg-noise {
         position: fixed;
         inset: 0;
         z-index: -1;
+        pointer-events: none;
       }
 
-      /* ---------- Splash Container ---------- */
-      .splash {
-        position: relative;
-        height: 100vh;
+      /* ---------- header (title bar) ---------- */
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        background: #d2b48c;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2rem;
+        border-bottom: 2px solid transparent;
+        transition: border-color 0.4s ease, background 0.4s ease;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: inherit;
+        z-index: -1;
+      }
+
+      .header.scrolled {
+        border-bottom-color: #222;
+        background: rgba(210, 180, 140, 0.95);
+        backdrop-filter: blur(10px);
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+
+      .header.scrolled .header-left {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .header-logo {
+        width: 40px;
+        height: auto;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .header-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .header-right {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+      }
+
+      .header.scrolled .header-right {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .header-tagline {
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      /* ---------- hero / splash ---------- */
+      .hero {
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
-        gap: 0.8rem;
-        transition: all 1s ease-in-out;
+        gap: 0.75rem;
+        padding: 5vh 1rem;
+        position: relative;
       }
 
-      /* Logo Styling */
-      .logo {
-        width: 40vw;
-        max-width: 320px;
-        transition: all 1s ease-in-out;
+      .hero-logo {
+        width: 60vw;
+        max-width: 500px;
+        height: auto;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      /* Taglines */
-      .tagline--primary {
+      .hero.scrolled .hero-logo {
+        opacity: 0;
+        transform: translateY(-100px) scale(0.3);
+      }
+
+      .hero-title {
         font-size: 1.5rem;
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .tagline--sub {
+
+      .hero.scrolled .hero-title {
+        opacity: 0;
+        transform: translateX(-100px);
+      }
+
+      .hero-tagline {
         font-size: 0.75rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .hero.scrolled .hero-tagline {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+
+      .scroll-indicator {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 1;
+        transition: opacity 0.4s ease;
+        animation: bounce 2s infinite;
+      }
+
+      .hero.scrolled .scroll-indicator {
+        opacity: 0;
+      }
+
+      .scroll-indicator span {
+        font-size: 0.65rem;
         letter-spacing: 2px;
         text-transform: uppercase;
       }
 
-      /* ---------- Header Bar (after shrink) ---------- */
-      header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 2rem;
-        height: 80px;
-        background: rgba(210, 180, 140, 0.9);
-        backdrop-filter: blur(8px);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        z-index: 10;
-        opacity: 0;
-        transform: translateY(-100%);
-        transition: all 0.8s ease-in-out;
+      .scroll-indicator svg {
+        width: 24px;
+        height: 24px;
       }
 
-      header.active {
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        40% {
+          transform: translateX(-50%) translateY(-10px);
+        }
+        60% {
+          transform: translateX(-50%) translateY(-5px);
+        }
+      }
+
+      @media (min-width: 768px) {
+        .hero-logo {
+          width: 40vw;
+          max-width: 300px;
+        }
+      }
+
+      /* ---------- main content ---------- */
+      .main {
+        padding: 4rem 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* Section base styles */
+      .section {
+        margin-bottom: 6rem;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .section.visible {
         opacity: 1;
         transform: translateY(0);
       }
 
-      header .logo-small {
-        width: 40px;
-        height: auto;
+      .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+        position: relative;
+        display: inline-block;
       }
 
-      nav a {
-        color: #222;
-        text-decoration: none;
-        margin-left: 1.5rem;
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: #222;
+      }
+
+      .section-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        max-width: 700px;
+        font-weight: 300;
+      }
+
+      /* ---------- Layout 1: Full-width intro ---------- */
+      .intro {
+        text-align: center;
+        padding: 4rem 0;
+      }
+
+      .intro .section-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .intro .section-text {
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      /* ---------- Layout 2: Two columns ---------- */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        align-items: center;
+      }
+
+      @media (min-width: 768px) {
+        .two-col {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .two-col--reverse .col-image {
+        order: -1;
+      }
+
+      @media (min-width: 768px) {
+        .two-col--reverse .col-image {
+          order: 1;
+        }
+      }
+
+      .col-image {
+        aspect-ratio: 4/3;
+        background: rgba(34, 34, 34, 0.1);
+        border: 2px solid #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(34, 34, 34, 0.5);
+      }
+
+      /* ---------- Layout 3: Three cards ---------- */
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      @media (min-width: 600px) {
+        .cards {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 900px) {
+        .cards {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid #222;
+        padding: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-icon {
+        width: 60px;
+        height: 60px;
+        background: #222;
+        color: #d2b48c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
         font-weight: 700;
         letter-spacing: 1px;
         text-transform: uppercase;
-        font-size: 0.9rem;
-      }
-
-      nav a:hover {
-        text-decoration: underline;
-      }
-
-      /* ---------- Content Sections ---------- */
-      main {
-        background: transparent;
-      }
-
-      section {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        gap: 2rem;
-        padding: 5rem 10%;
-        min-height: 70vh;
-        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        opacity: 0;
-        transform: translateY(40px);
-      }
-
-      /* Alternating layout background variation */
-      section:nth-child(even) {
-        background: rgba(255, 255, 255, 0.2);
-        flex-direction: row-reverse;
-      }
-
-      section.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      section img {
-        max-width: 420px;
-        width: 45%;
-        height: auto;
-        border-radius: 8px;
-        object-fit: cover;
-        flex: 1 1 40%;
-      }
-
-      section .text {
-        flex: 1 1 45%;
-      }
-
-      h2 {
-        font-size: 1.8rem;
         margin-bottom: 1rem;
       }
 
-      p {
-        font-size: 1rem;
-        line-height: 1.6;
+      .card-text {
+        font-size: 0.95rem;
+        font-weight: 300;
+        line-height: 1.7;
       }
 
-      footer {
+      /* ---------- Layout 4: Full-width banner ---------- */
+      .banner {
+        background: #222;
+        color: #d2b48c;
+        padding: 5rem 2rem;
         text-align: center;
-        padding: 3rem;
-        font-size: 0.9rem;
-        opacity: 0.8;
+        margin-left: -2rem;
+        margin-right: -2rem;
       }
 
-      @media (max-width: 768px) {
-        .logo {
-          max-width: 200px;
+      .banner .section-title {
+        color: #d2b48c;
+      }
+
+      .banner .section-title::after {
+        background: #d2b48c;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .banner .section-text {
+        color: #d2b48c;
+        margin: 0 auto;
+      }
+
+      .banner-cta {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 1rem 3rem;
+        border: 2px solid #d2b48c;
+        color: #d2b48c;
+        text-decoration: none;
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+
+      .banner-cta:hover {
+        background: #d2b48c;
+        color: #222;
+      }
+
+      /* ---------- Layout 5: Image grid ---------- */
+      .image-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      @media (min-width: 768px) {
+        .image-grid {
+          grid-template-columns: repeat(4, 1fr);
         }
-        section {
-          flex-direction: column;
-          text-align: center;
+      }
+
+      .grid-item {
+        aspect-ratio: 1;
+        background: rgba(34, 34, 34, 0.1);
+        border: 2px solid #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: rgba(34, 34, 34, 0.5);
+        transition: background 0.3s ease;
+      }
+
+      .grid-item:hover {
+        background: rgba(34, 34, 34, 0.2);
+      }
+
+      .grid-item--large {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+
+      /* ---------- Layout 6: Stats row ---------- */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        text-align: center;
+        padding: 3rem 0;
+        border-top: 2px solid #222;
+        border-bottom: 2px solid #222;
+      }
+
+      @media (min-width: 768px) {
+        .stats {
+          grid-template-columns: repeat(4, 1fr);
         }
-        section img {
-          width: 100%;
-        }
+      }
+
+      .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 300;
+      }
+
+      /* ---------- Layout 7: Testimonial ---------- */
+      .testimonial {
+        text-align: center;
+        padding: 4rem 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .testimonial-quote {
+        font-size: 1.5rem;
+        font-weight: 300;
+        font-style: italic;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        position: relative;
+      }
+
+      .testimonial-quote::before {
+        content: """;
+        font-size: 6rem;
+        position: absolute;
+        top: -2rem;
+        left: -1rem;
+        opacity: 0.2;
+        font-style: normal;
+      }
+
+      .testimonial-author {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .testimonial-role {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        font-weight: 300;
+        margin-top: 0.25rem;
+      }
+
+      /* ---------- Footer ---------- */
+      .footer {
+        background: #222;
+        color: #d2b48c;
+        padding: 4rem 2rem;
+        text-align: center;
+      }
+
+      .footer-logo {
+        width: 60px;
+        filter: invert(1) sepia(1) saturate(0) brightness(1.5);
+        margin-bottom: 1.5rem;
+      }
+
+      .footer-title {
+        font-size: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-tagline {
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 300;
+        margin-bottom: 2rem;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+      }
+
+      .footer-links a {
+        color: #d2b48c;
+        text-decoration: none;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: opacity 0.3s ease;
+      }
+
+      .footer-links a:hover {
+        opacity: 0.7;
+      }
+
+      .footer-copy {
+        font-size: 0.75rem;
+        opacity: 0.7;
       }
     </style>
   </head>
 
   <body>
-    <!-- background noise filter -->
+    <!-- noise filter -->
     <svg id="bg-noise" xmlns="http://www.w3.org/2000/svg">
       <filter id="noiseFilter">
         <feTurbulence
@@ -213,7 +610,7 @@
           values="0 0 0 0 0
                   0 0 0 0 0
                   0 0 0 0 0
-                  0 0 0 0.2 0"
+                  0 0 0 0.15 0"
         />
       </filter>
       <rect
@@ -224,121 +621,261 @@
       />
     </svg>
 
-    <!-- Splash -->
-    <div class="splash" id="splash">
-      <img
-        class="logo"
-        src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
-        alt="⅓"
-      />
-      <div class="tagline tagline--primary">One&nbsp;Third&nbsp;Party</div>
-      <div class="tagline tagline--sub">
-        A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice
+    <!-- Fixed Header -->
+    <header class="header" id="header">
+      <div class="header-left">
+        <img
+          class="header-logo"
+          src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
+          alt="⅓"
+        />
+        <span class="header-title">One Third Party</span>
       </div>
-    </div>
-
-    <!-- Header Bar -->
-    <header id="header">
-      <img
-        class="logo-small"
-        src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
-        alt="⅓"
-      />
-      <nav>
-        <a href="#vision">Vision</a>
-        <a href="#community">Community</a>
-        <a href="#future">Future</a>
-      </nav>
+      <div class="header-right">
+        <span class="header-tagline"
+          >A Plurality for Peace and Justice</span
+        >
+      </div>
     </header>
 
-    <main>
-      <section id="vision">
-        <img
-          src="https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=1000"
-          alt="placeholder"
-        />
-        <div class="text">
-          <h2>Our Vision</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-            vitae justo ac velit cursus rhoncus. Quisque bibendum purus at
-            mauris tempor, vel blandit magna facilisis. Donec vitae turpis
-            ullamcorper, pharetra nulla ut, pulvinar orci.
+    <!-- Hero / Splash -->
+    <section class="hero" id="hero">
+      <img
+        class="hero-logo"
+        src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
+        alt="⅓"
+      />
+      <div class="hero-title">One&nbsp;Third&nbsp;Party</div>
+      <div class="hero-tagline">
+        A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice
+      </div>
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M19 12l-7 7-7-7" />
+        </svg>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Layout 1: Full-width intro -->
+      <section class="section intro">
+        <h2 class="section-title">Our Mission</h2>
+        <p class="section-text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore.
+        </p>
+      </section>
+
+      <!-- Layout 2: Two columns -->
+      <section class="section two-col">
+        <div class="col-content">
+          <h2 class="section-title">Building Together</h2>
+          <p class="section-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
           </p>
+          <p class="section-text" style="margin-top: 1rem">
+            Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+            cupidatat non proident.
+          </p>
+        </div>
+        <div class="col-image">Image Placeholder</div>
+      </section>
+
+      <!-- Layout 2 (reversed): Two columns -->
+      <section class="section two-col two-col--reverse">
+        <div class="col-content">
+          <h2 class="section-title">Our Approach</h2>
+          <p class="section-text">
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+            officia deserunt mollit anim id est laborum. Sed ut perspiciatis
+            unde omnis iste natus error sit voluptatem accusantium doloremque
+            laudantium.
+          </p>
+          <p class="section-text" style="margin-top: 1rem">
+            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
+            fugit, sed quia consequuntur magni dolores eos qui ratione
+            voluptatem sequi nesciunt.
+          </p>
+        </div>
+        <div class="col-image">Image Placeholder</div>
+      </section>
+
+      <!-- Layout 3: Three cards -->
+      <section class="section">
+        <h2 class="section-title" style="margin-bottom: 2.5rem">
+          Core Principles
+        </h2>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">01</div>
+            <h3 class="card-title">Principle One</h3>
+            <p class="card-text">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">02</div>
+            <h3 class="card-title">Principle Two</h3>
+            <p class="card-text">
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">03</div>
+            <h3 class="card-title">Principle Three</h3>
+            <p class="card-text">
+              Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur.
+            </p>
+          </div>
         </div>
       </section>
 
-      <section id="community">
-        <img
-          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1000"
-          alt="placeholder"
-        />
-        <div class="text">
-          <h2>Community in Action</h2>
-          <p>
-            Integer sit amet fringilla metus. Phasellus porttitor est eu augue
-            mattis, non sagittis magna sagittis. Nam id lorem erat. Aenean nec
-            scelerisque eros. Donec id sapien orci. Sed iaculis libero in dolor
-            tincidunt, quis condimentum mi pellentesque.
-          </p>
+      <!-- Layout 6: Stats -->
+      <section class="section stats">
+        <div class="stat">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Communities</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">10K</div>
+          <div class="stat-label">Members</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">33%</div>
+          <div class="stat-label">Growth Rate</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Possibilities</div>
         </div>
       </section>
 
-      <section id="future">
-        <img
-          src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000"
-          alt="placeholder"
-        />
-        <div class="text">
-          <h2>Building a Future</h2>
-          <p>
-            Nunc bibendum, mi in tincidunt commodo, odio metus porta eros, id
-            feugiat leo odio nec dolor. Sed laoreet, augue vitae commodo
-            efficitur, dui felis pulvinar enim, nec venenatis sapien risus nec
-            orci.
-          </p>
+      <!-- Layout 4: Full-width banner -->
+      <section class="section banner">
+        <h2 class="section-title">Join the Movement</h2>
+        <p class="section-text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Together,
+          we can build a future founded on peace, justice, and plurality.
+        </p>
+        <a href="#" class="banner-cta">Get Involved</a>
+      </section>
+
+      <!-- Layout 5: Image grid -->
+      <section class="section">
+        <h2 class="section-title" style="margin-bottom: 2.5rem">Gallery</h2>
+        <div class="image-grid">
+          <div class="grid-item grid-item--large">Large Image</div>
+          <div class="grid-item">Image 1</div>
+          <div class="grid-item">Image 2</div>
+          <div class="grid-item">Image 3</div>
+          <div class="grid-item">Image 4</div>
+          <div class="grid-item">Image 5</div>
+          <div class="grid-item">Image 6</div>
         </div>
       </section>
 
-      <footer>
-        © 2025 One Third Party — A Plurality for Peace and Justice
-      </footer>
+      <!-- Layout 7: Testimonial -->
+      <section class="section testimonial">
+        <blockquote class="testimonial-quote">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation.
+        </blockquote>
+        <div class="testimonial-author">Jane Doe</div>
+        <div class="testimonial-role">Community Leader</div>
+      </section>
+
+      <!-- Additional Layout: Two columns again -->
+      <section class="section two-col">
+        <div class="col-content">
+          <h2 class="section-title">Looking Forward</h2>
+          <p class="section-text">
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+            quae ab illo inventore veritatis et quasi architecto beatae vitae
+            dicta sunt explicabo.
+          </p>
+        </div>
+        <div class="col-image">Image Placeholder</div>
+      </section>
     </main>
 
+    <!-- Footer -->
+    <footer class="footer">
+      <img
+        class="footer-logo"
+        src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
+        alt="⅓"
+      />
+      <div class="footer-title">One Third Party</div>
+      <div class="footer-tagline">A Plurality for Peace and Justice</div>
+      <nav class="footer-links">
+        <a href="#">About</a>
+        <a href="#">Platform</a>
+        <a href="#">Community</a>
+        <a href="#">Events</a>
+        <a href="#">Contact</a>
+      </nav>
+      <div class="footer-copy">© 2025 One Third Party. All rights reserved.</div>
+    </footer>
+
     <script>
-      const splash = document.getElementById("splash");
+      // Scroll-based animations
       const header = document.getElementById("header");
-      const sections = document.querySelectorAll("section");
+      const hero = document.getElementById("hero");
+      const sections = document.querySelectorAll(".section");
 
-      // reveal animation for content sections when visible
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("visible");
-            }
-          });
-        },
-        { threshold: 0.2 }
-      );
+      // Threshold for when header becomes visible
+      const scrollThreshold = window.innerHeight * 0.3;
 
-      sections.forEach((section) => observer.observe(section));
-
-      // scroll-based splash transition
-      window.addEventListener("scroll", () => {
+      function handleScroll() {
         const scrollY = window.scrollY;
-        const trigger = window.innerHeight * 0.3;
 
-        if (scrollY > trigger) {
-          splash.style.transform = "translateY(-100vh)";
-          splash.style.opacity = "0";
-          header.classList.add("active");
+        // Header and hero animations
+        if (scrollY > scrollThreshold) {
+          header.classList.add("scrolled");
+          hero.classList.add("scrolled");
         } else {
-          splash.style.transform = "translateY(0)";
-          splash.style.opacity = "1";
-          header.classList.remove("active");
+          header.classList.remove("scrolled");
+          hero.classList.remove("scrolled");
         }
+      }
+
+      // Intersection Observer for section animations
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.15,
+      };
+
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      sections.forEach((section) => {
+        sectionObserver.observe(section);
       });
+
+      // Event listeners
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      window.addEventListener("load", handleScroll);
     </script>
   </body>
 </html>
