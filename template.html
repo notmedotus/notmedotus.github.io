@@ -56,48 +56,48 @@
         left: 0;
         right: 0;
         height: 70px;
-        background: #d2b48c;
+        background: rgba(210, 180, 140, 0.95);
+        backdrop-filter: blur(10px);
         z-index: 1000;
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 0 2rem;
-        border-bottom: 2px solid transparent;
-        transition: border-color 0.4s ease, background 0.4s ease;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.1s ease;
       }
 
-      .header::before {
+      .header.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .header::after {
         content: "";
         position: absolute;
-        inset: 0;
-        background: inherit;
-        z-index: -1;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #222;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
       }
 
-      .header.scrolled {
-        border-bottom-color: #222;
-        background: rgba(210, 180, 140, 0.95);
-        backdrop-filter: blur(10px);
+      .header.visible::after {
+        transform: scaleX(1);
       }
 
       .header-left {
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        opacity: 0;
-        transform: translateY(-20px);
-        transition: opacity 0.5s ease, transform 0.5s ease;
-      }
-
-      .header.scrolled .header-left {
-        opacity: 1;
-        transform: translateY(0);
       }
 
       .header-logo {
         width: 40px;
         height: auto;
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       .header-title {
@@ -106,17 +106,6 @@
         letter-spacing: 2px;
         text-transform: uppercase;
         white-space: nowrap;
-      }
-
-      .header-right {
-        opacity: 0;
-        transform: translateY(-20px);
-        transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
-      }
-
-      .header.scrolled .header-right {
-        opacity: 1;
-        transform: translateY(0);
       }
 
       .header-tagline {
@@ -134,21 +123,15 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        gap: 0.75rem;
-        padding: 5vh 1rem;
         position: relative;
+        overflow: hidden;
       }
 
       .hero-logo {
         width: 60vw;
         max-width: 500px;
         height: auto;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .hero.scrolled .hero-logo {
-        opacity: 0;
-        transform: translateY(-100px) scale(0.3);
+        will-change: transform, opacity;
       }
 
       .hero-title {
@@ -156,69 +139,16 @@
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .hero.scrolled .hero-title {
-        opacity: 0;
-        transform: translateX(-100px);
+        margin-top: 0.75rem;
+        will-change: transform, opacity;
       }
 
       .hero-tagline {
         font-size: 0.75rem;
         letter-spacing: 2px;
         text-transform: uppercase;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .hero.scrolled .hero-tagline {
-        opacity: 0;
-        transform: translateX(100px);
-      }
-
-      .scroll-indicator {
-        position: absolute;
-        bottom: 2rem;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        opacity: 1;
-        transition: opacity 0.4s ease;
-        animation: bounce 2s infinite;
-      }
-
-      .hero.scrolled .scroll-indicator {
-        opacity: 0;
-      }
-
-      .scroll-indicator span {
-        font-size: 0.65rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-      }
-
-      .scroll-indicator svg {
-        width: 24px;
-        height: 24px;
-      }
-
-      @keyframes bounce {
-        0%,
-        20%,
-        50%,
-        80%,
-        100% {
-          transform: translateX(-50%) translateY(0);
-        }
-        40% {
-          transform: translateX(-50%) translateY(-10px);
-        }
-        60% {
-          transform: translateX(-50%) translateY(-5px);
-        }
+        margin-top: 0.75rem;
+        will-change: transform, opacity;
       }
 
       @media (min-width: 768px) {
@@ -621,7 +551,7 @@
       />
     </svg>
 
-    <!-- Fixed Header -->
+    <!-- Fixed Header (hidden initially) -->
     <header class="header" id="header">
       <div class="header-left">
         <img
@@ -632,9 +562,7 @@
         <span class="header-title">One Third Party</span>
       </div>
       <div class="header-right">
-        <span class="header-tagline"
-          >A Plurality for Peace and Justice</span
-        >
+        <span class="header-tagline">A Plurality for Peace and Justice</span>
       </div>
     </header>
 
@@ -642,18 +570,13 @@
     <section class="hero" id="hero">
       <img
         class="hero-logo"
+        id="heroLogo"
         src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
         alt="⅓"
       />
-      <div class="hero-title">One&nbsp;Third&nbsp;Party</div>
-      <div class="hero-tagline">
+      <div class="hero-title" id="heroTitle">One&nbsp;Third&nbsp;Party</div>
+      <div class="hero-tagline" id="heroTagline">
         A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice
-      </div>
-      <div class="scroll-indicator">
-        <span>Scroll</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14M19 12l-7 7-7-7" />
-        </svg>
       </div>
     </section>
 
@@ -833,25 +756,76 @@
     </footer>
 
     <script>
-      // Scroll-based animations
+      // Elements
       const header = document.getElementById("header");
-      const hero = document.getElementById("hero");
+      const heroLogo = document.getElementById("heroLogo");
+      const heroTitle = document.getElementById("heroTitle");
+      const heroTagline = document.getElementById("heroTagline");
       const sections = document.querySelectorAll(".section");
 
-      // Threshold for when header becomes visible
-      const scrollThreshold = window.innerHeight * 0.3;
+      // Animation distance (how far user scrolls before animation completes)
+      const animationDistance = window.innerHeight * 0.5;
+
+      // Easing function for smoother animation
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
 
       function handleScroll() {
         const scrollY = window.scrollY;
 
-        // Header and hero animations
-        if (scrollY > scrollThreshold) {
-          header.classList.add("scrolled");
-          hero.classList.add("scrolled");
+        // Calculate progress (0 to 1)
+        const rawProgress = Math.min(scrollY / animationDistance, 1);
+        const progress = easeOutCubic(rawProgress);
+
+        // Show/hide header based on progress
+        if (progress > 0.95) {
+          header.classList.add("visible");
         } else {
-          header.classList.remove("scrolled");
-          hero.classList.remove("scrolled");
+          header.classList.remove("visible");
         }
+
+        // Calculate target positions for hero elements
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        // Logo: shrink and move up to header position
+        const logoStartSize = Math.min(viewportWidth * 0.4, 300);
+        const logoEndSize = 40;
+        const logoSize = logoStartSize - (logoStartSize - logoEndSize) * progress;
+        const logoScale = logoSize / logoStartSize;
+
+        // Calculate vertical movement (from center to top)
+        const logoStartY = 0;
+        const logoEndY = -(viewportHeight / 2) + 35 + (logoStartSize * logoScale) / 2;
+        const logoY = logoStartY + (logoEndY - logoStartY) * progress;
+
+        // Calculate horizontal movement for logo (center to left)
+        const logoEndX = -(viewportWidth / 2) + 32 + 20 + (logoSize / 2);
+        const logoX = logoEndX * progress;
+
+        heroLogo.style.transform = `translate(${logoX}px, ${logoY}px) scale(${logoScale})`;
+        heroLogo.style.opacity = 1 - progress * 0.3;
+
+        // Title: move up and left
+        const titleEndY = -(viewportHeight / 2) + 35;
+        const titleEndX = -(viewportWidth / 2) + 32 + 40 + 12 + 80; // left padding + logo + gap + offset
+        const titleY = titleEndY * progress;
+        const titleX = titleEndX * progress;
+        const titleScale = 1 - (1 - 0.733) * progress; // 1.1rem / 1.5rem ≈ 0.733
+
+        heroTitle.style.transform = `translate(${titleX}px, ${titleY}px) scale(${titleScale})`;
+        heroTitle.style.opacity = 1 - progress;
+
+        // Tagline: move up and right
+        const taglineEndY = -(viewportHeight / 2) + 35;
+        const taglineEndX = (viewportWidth / 2) - 32 - 150; // right padding + offset
+        const taglineY = taglineEndY * progress;
+        const taglineX = taglineEndX * progress;
+        const taglineScale = 1 - (1 - 0.933) * progress; // 0.7rem / 0.75rem ≈ 0.933
+
+        heroTagline.style.transform = `translate(${taglineX}px, ${taglineY}px) scale(${taglineScale})`;
+        heroTagline.style.opacity = 1 - progress;
       }
 
       // Intersection Observer for section animations
@@ -873,9 +847,27 @@
         sectionObserver.observe(section);
       });
 
-      // Event listeners
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      window.addEventListener("load", handleScroll);
+      // Event listeners with requestAnimationFrame for smooth performance
+      let ticking = false;
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              handleScroll();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        },
+        { passive: true }
+      );
+
+      // Handle resize
+      window.addEventListener("resize", handleScroll);
+
+      // Initial call
+      handleScroll();
     </script>
   </body>
 </html>
