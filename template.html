@@ -21,7 +21,6 @@
     />
 
     <style>
-      /* ---------- reset & page ---------- */
       *,
       *::before,
       *::after {
@@ -42,78 +41,63 @@
       }
 
       /* ---------- noise background -------- */
-      #bg-noise {
+      .noise-bg {
         position: fixed;
-        inset: 0;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         z-index: -1;
         pointer-events: none;
+        opacity: 0.15;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
       }
 
-      /* ---------- header (title bar) ---------- */
-      .header {
+      /* ---------- header line only ---------- */
+      .header-line {
+        position: fixed;
+        top: 70px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: #222;
+        z-index: 1002;
+        transform: translateX(-50%);
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .header-line.visible {
+        width: 100%;
+      }
+
+      /* ---------- header background (appears after animation) ---------- */
+      .header-bg {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         height: 70px;
+        background: #d2b48c;
         z-index: 1000;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 2rem;
-        pointer-events: none;
+        display: none;
       }
 
-      .header-bg {
-        position: absolute;
-        inset: 0;
-        background: rgba(210, 180, 140, 0.98);
-        backdrop-filter: blur(10px);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .header.complete .header-bg {
-        opacity: 1;
-      }
-
-      .header.complete {
-        pointer-events: auto;
-      }
-
-      .header-line {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        right: 50%;
-        height: 2px;
-        background: #222;
-        transition: left 0.4s ease, right 0.4s ease;
-      }
-
-      .header.complete .header-line {
-        left: 0;
-        right: 0;
+      .header-bg.visible {
+        display: block;
       }
 
       /* ---------- hero / splash ---------- */
       .hero {
         height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
         position: relative;
-        overflow: visible;
       }
 
       .hero-logo {
         position: fixed;
         width: 300px;
         height: auto;
-        will-change: transform;
         z-index: 1001;
+        pointer-events: none;
       }
 
       .hero-title {
@@ -123,8 +107,8 @@
         letter-spacing: 2px;
         text-transform: uppercase;
         white-space: nowrap;
-        will-change: transform;
         z-index: 1001;
+        pointer-events: none;
       }
 
       .hero-tagline {
@@ -133,8 +117,8 @@
         letter-spacing: 2px;
         text-transform: uppercase;
         white-space: nowrap;
-        will-change: transform;
         z-index: 1001;
+        pointer-events: none;
       }
 
       @media (max-width: 768px) {
@@ -142,10 +126,10 @@
           width: 200px;
         }
         .hero-title {
-          font-size: 1.2rem;
+          font-size: 1.1rem;
         }
         .hero-tagline {
-          font-size: 0.65rem;
+          font-size: 0.6rem;
         }
       }
 
@@ -156,7 +140,6 @@
         margin: 0 auto;
       }
 
-      /* Section base styles */
       .section {
         margin-bottom: 6rem;
         opacity: 0;
@@ -196,7 +179,6 @@
         font-weight: 300;
       }
 
-      /* ---------- Layout 1: Full-width intro ---------- */
       .intro {
         text-align: center;
         padding: 4rem 0;
@@ -212,7 +194,6 @@
         text-align: center;
       }
 
-      /* ---------- Layout 2: Two columns ---------- */
       .two-col {
         display: grid;
         grid-template-columns: 1fr;
@@ -249,7 +230,6 @@
         color: rgba(34, 34, 34, 0.5);
       }
 
-      /* ---------- Layout 3: Three cards ---------- */
       .cards {
         display: grid;
         grid-template-columns: 1fr;
@@ -307,7 +287,6 @@
         line-height: 1.7;
       }
 
-      /* ---------- Layout 4: Full-width banner ---------- */
       .banner {
         background: #222;
         color: #d2b48c;
@@ -350,7 +329,6 @@
         color: #222;
       }
 
-      /* ---------- Layout 5: Image grid ---------- */
       .image-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -386,7 +364,6 @@
         grid-row: span 2;
       }
 
-      /* ---------- Layout 6: Stats row ---------- */
       .stats {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -417,7 +394,6 @@
         font-weight: 300;
       }
 
-      /* ---------- Layout 7: Testimonial ---------- */
       .testimonial {
         text-align: center;
         padding: 4rem 2rem;
@@ -458,7 +434,6 @@
         margin-top: 0.25rem;
       }
 
-      /* ---------- Footer ---------- */
       .footer {
         background: #222;
         color: #d2b48c;
@@ -517,38 +492,16 @@
   </head>
 
   <body>
-    <!-- noise filter -->
-    <svg id="bg-noise" xmlns="http://www.w3.org/2000/svg">
-      <filter id="noiseFilter">
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.8"
-          numOctaves="2"
-          stitchTiles="stitch"
-        />
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0
-                  0 0 0 0 0
-                  0 0 0 0 0
-                  0 0 0 0.15 0"
-        />
-      </filter>
-      <rect
-        width="100%"
-        height="100%"
-        fill="#d2b48c"
-        filter="url(#noiseFilter)"
-      />
-    </svg>
+    <!-- Simple CSS noise background instead of SVG -->
+    <div class="noise-bg"></div>
 
-    <!-- Fixed Header -->
-    <header class="header" id="header">
-      <div class="header-bg"></div>
-      <div class="header-line"></div>
-    </header>
+    <!-- Header background - only shown after animation complete -->
+    <div class="header-bg" id="headerBg"></div>
 
-    <!-- Hero / Splash - elements are fixed positioned and animate -->
+    <!-- Header line - animates in at the end -->
+    <div class="header-line" id="headerLine"></div>
+
+    <!-- Hero elements - these animate to become the header -->
     <section class="hero" id="hero">
       <img
         class="hero-logo"
@@ -557,14 +510,11 @@
         alt="⅓"
       />
       <div class="hero-title" id="heroTitle">One&nbsp;Third&nbsp;Party</div>
-      <div class="hero-tagline" id="heroTagline">
-        A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice
-      </div>
+      <div class="hero-tagline" id="heroTagline">A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice</div>
     </section>
 
     <!-- Main Content -->
     <main class="main">
-      <!-- Layout 1: Full-width intro -->
       <section class="section intro">
         <h2 class="section-title">Our Mission</h2>
         <p class="section-text">
@@ -576,7 +526,6 @@
         </p>
       </section>
 
-      <!-- Layout 2: Two columns -->
       <section class="section two-col">
         <div class="col-content">
           <h2 class="section-title">Building Together</h2>
@@ -595,7 +544,6 @@
         <div class="col-image">Image Placeholder</div>
       </section>
 
-      <!-- Layout 2 (reversed): Two columns -->
       <section class="section two-col two-col--reverse">
         <div class="col-content">
           <h2 class="section-title">Our Approach</h2>
@@ -614,11 +562,8 @@
         <div class="col-image">Image Placeholder</div>
       </section>
 
-      <!-- Layout 3: Three cards -->
       <section class="section">
-        <h2 class="section-title" style="margin-bottom: 2.5rem">
-          Core Principles
-        </h2>
+        <h2 class="section-title" style="margin-bottom: 2.5rem">Core Principles</h2>
         <div class="cards">
           <div class="card">
             <div class="card-icon">01</div>
@@ -647,7 +592,6 @@
         </div>
       </section>
 
-      <!-- Layout 6: Stats -->
       <section class="section stats">
         <div class="stat">
           <div class="stat-number">50+</div>
@@ -667,7 +611,6 @@
         </div>
       </section>
 
-      <!-- Layout 4: Full-width banner -->
       <section class="section banner">
         <h2 class="section-title">Join the Movement</h2>
         <p class="section-text">
@@ -678,7 +621,6 @@
         <a href="#" class="banner-cta">Get Involved</a>
       </section>
 
-      <!-- Layout 5: Image grid -->
       <section class="section">
         <h2 class="section-title" style="margin-bottom: 2.5rem">Gallery</h2>
         <div class="image-grid">
@@ -692,7 +634,6 @@
         </div>
       </section>
 
-      <!-- Layout 7: Testimonial -->
       <section class="section testimonial">
         <blockquote class="testimonial-quote">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
@@ -703,7 +644,6 @@
         <div class="testimonial-role">Community Leader</div>
       </section>
 
-      <!-- Additional Layout: Two columns again -->
       <section class="section two-col">
         <div class="col-content">
           <h2 class="section-title">Looking Forward</h2>
@@ -718,7 +658,6 @@
       </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
       <img
         class="footer-logo"
@@ -738,38 +677,41 @@
     </footer>
 
     <script>
-      const header = document.getElementById("header");
+      const headerBg = document.getElementById("headerBg");
+      const headerLine = document.getElementById("headerLine");
       const heroLogo = document.getElementById("heroLogo");
       const heroTitle = document.getElementById("heroTitle");
       const heroTagline = document.getElementById("heroTagline");
       const sections = document.querySelectorAll(".section");
 
-      // Configuration
-      const animationDistance = window.innerHeight * 0.6;
-
-      // Store initial positions (calculated once on load)
       let positions = {};
+      let animationDistance;
 
       function calculatePositions() {
         const vw = window.innerWidth;
         const vh = window.innerHeight;
 
-        // Starting sizes
+        // Animation completes when first content section reaches header
+        // Hero is 100vh, main has 4rem padding top, so content starts at 100vh + 4rem
+        // We want animation done when that content is at ~70px from top
+        animationDistance = vh - 70 + 64; // 64px = 4rem padding
+
+        // Starting sizes (centered in viewport)
         const logoStartSize = vw <= 768 ? 200 : 300;
         const logoEndSize = 40;
+        const titleStartSize = vw <= 768 ? 17.6 : 24;
+        const titleEndSize = 17.6;
+        const taglineStartSize = vw <= 768 ? 9.6 : 12;
+        const taglineEndSize = 11.2;
 
-        // Title measurements
-        const titleStartFontSize = vw <= 768 ? 19.2 : 24; // 1.2rem or 1.5rem
-        const titleEndFontSize = 17.6; // 1.1rem
-
-        // Tagline measurements
-        const taglineStartFontSize = vw <= 768 ? 10.4 : 12; // 0.65rem or 0.75rem
-        const taglineEndFontSize = 11.2; // 0.7rem
+        // Calculate starting Y positions (vertically centered as a group)
+        const groupHeight = logoStartSize + 24 + 24; // logo + title gap + tagline gap
+        const groupStartY = vh / 2 - groupHeight / 2;
 
         positions = {
           logo: {
             startX: vw / 2,
-            startY: vh / 2 - 40,
+            startY: groupStartY + logoStartSize / 2,
             startSize: logoStartSize,
             endX: 32 + logoEndSize / 2,
             endY: 35,
@@ -777,19 +719,19 @@
           },
           title: {
             startX: vw / 2,
-            startY: vh / 2 + logoStartSize / 2 - 20,
-            startFontSize: titleStartFontSize,
-            endX: 32 + logoEndSize + 12 + 100,
+            startY: groupStartY + logoStartSize + 24,
+            startSize: titleStartSize,
+            endX: 32 + logoEndSize + 16 + 90,
             endY: 35,
-            endFontSize: titleEndFontSize,
+            endSize: titleEndSize,
           },
           tagline: {
             startX: vw / 2,
-            startY: vh / 2 + logoStartSize / 2 + 20,
-            startFontSize: taglineStartFontSize,
-            endX: vw - 32 - 150,
+            startY: groupStartY + logoStartSize + 24 + 32,
+            startSize: taglineStartSize,
+            endX: vw - 32 - 140,
             endY: 35,
-            endFontSize: taglineEndFontSize,
+            endSize: taglineEndSize,
           },
         };
       }
@@ -798,77 +740,76 @@
         return start + (end - start) * t;
       }
 
-      function easeInOutCubic(t) {
-        return t < 0.5
-          ? 4 * t * t * t
-          : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      function easeOutQuart(t) {
+        return 1 - Math.pow(1 - t, 4);
       }
+
+      let animationComplete = false;
 
       function handleScroll() {
         const scrollY = window.scrollY;
         const rawProgress = Math.min(Math.max(scrollY / animationDistance, 0), 1);
-        const progress = easeInOutCubic(rawProgress);
+        const progress = easeOutQuart(rawProgress);
 
         const p = positions;
 
-        // Logo animation
+        // Logo
         const logoX = lerp(p.logo.startX, p.logo.endX, progress);
         const logoY = lerp(p.logo.startY, p.logo.endY, progress);
         const logoSize = lerp(p.logo.startSize, p.logo.endSize, progress);
+        heroLogo.style.left = logoX + "px";
+        heroLogo.style.top = logoY + "px";
+        heroLogo.style.width = logoSize + "px";
+        heroLogo.style.transform = "translate(-50%, -50%)";
 
-        heroLogo.style.left = `${logoX}px`;
-        heroLogo.style.top = `${logoY}px`;
-        heroLogo.style.width = `${logoSize}px`;
-        heroLogo.style.transform = `translate(-50%, -50%)`;
-
-        // Title animation
+        // Title
         const titleX = lerp(p.title.startX, p.title.endX, progress);
         const titleY = lerp(p.title.startY, p.title.endY, progress);
-        const titleFontSize = lerp(p.title.startFontSize, p.title.endFontSize, progress);
+        const titleSize = lerp(p.title.startSize, p.title.endSize, progress);
+        heroTitle.style.left = titleX + "px";
+        heroTitle.style.top = titleY + "px";
+        heroTitle.style.fontSize = titleSize + "px";
+        heroTitle.style.transform = "translate(-50%, -50%)";
 
-        heroTitle.style.left = `${titleX}px`;
-        heroTitle.style.top = `${titleY}px`;
-        heroTitle.style.fontSize = `${titleFontSize}px`;
-        heroTitle.style.transform = `translate(-50%, -50%)`;
-
-        // Tagline animation
+        // Tagline
         const taglineX = lerp(p.tagline.startX, p.tagline.endX, progress);
         const taglineY = lerp(p.tagline.startY, p.tagline.endY, progress);
-        const taglineFontSize = lerp(p.tagline.startFontSize, p.tagline.endFontSize, progress);
+        const taglineSize = lerp(p.tagline.startSize, p.tagline.endSize, progress);
+        heroTagline.style.left = taglineX + "px";
+        heroTagline.style.top = taglineY + "px";
+        heroTagline.style.fontSize = taglineSize + "px";
+        heroTagline.style.transform = "translate(-50%, -50%)";
 
-        heroTagline.style.left = `${taglineX}px`;
-        heroTagline.style.top = `${taglineY}px`;
-        heroTagline.style.fontSize = `${taglineFontSize}px`;
-        heroTagline.style.transform = `translate(-50%, -50%)`;
-
-        // Header background and line animation
-        if (progress >= 1) {
-          header.classList.add("complete");
-        } else {
-          header.classList.remove("complete");
+        // Header background and line - only when animation is complete
+        if (rawProgress >= 1 && !animationComplete) {
+          animationComplete = true;
+          headerBg.classList.add("visible");
+          // Small delay for line to animate after bg appears
+          setTimeout(() => {
+            headerLine.classList.add("visible");
+          }, 50);
+        } else if (rawProgress < 1 && animationComplete) {
+          animationComplete = false;
+          headerBg.classList.remove("visible");
+          headerLine.classList.remove("visible");
         }
       }
 
-      // Intersection Observer for section animations
-      const observerOptions = {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.15,
-      };
+      // Section observer
+      const sectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
 
-      const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      }, observerOptions);
+      sections.forEach((section) => sectionObserver.observe(section));
 
-      sections.forEach((section) => {
-        sectionObserver.observe(section);
-      });
-
-      // Scroll handler with RAF
+      // Scroll with RAF
       let ticking = false;
       window.addEventListener(
         "scroll",
@@ -884,13 +825,11 @@
         { passive: true }
       );
 
-      // Recalculate on resize
       window.addEventListener("resize", () => {
         calculatePositions();
         handleScroll();
       });
 
-      // Initial setup
       calculatePositions();
       handleScroll();
     </script>
