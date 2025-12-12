@@ -745,4 +745,154 @@
       const sections = document.querySelectorAll(".section");
 
       // Configuration
-      const animationDistance
+      const animationDistance = window.innerHeight * 0.6;
+
+      // Store initial positions (calculated once on load)
+      let positions = {};
+
+      function calculatePositions() {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        // Starting sizes
+        const logoStartSize = vw <= 768 ? 200 : 300;
+        const logoEndSize = 40;
+
+        // Title measurements
+        const titleStartFontSize = vw <= 768 ? 19.2 : 24; // 1.2rem or 1.5rem
+        const titleEndFontSize = 17.6; // 1.1rem
+
+        // Tagline measurements
+        const taglineStartFontSize = vw <= 768 ? 10.4 : 12; // 0.65rem or 0.75rem
+        const taglineEndFontSize = 11.2; // 0.7rem
+
+        positions = {
+          logo: {
+            startX: vw / 2,
+            startY: vh / 2 - 40,
+            startSize: logoStartSize,
+            endX: 32 + logoEndSize / 2,
+            endY: 35,
+            endSize: logoEndSize,
+          },
+          title: {
+            startX: vw / 2,
+            startY: vh / 2 + logoStartSize / 2 - 20,
+            startFontSize: titleStartFontSize,
+            endX: 32 + logoEndSize + 12 + 100,
+            endY: 35,
+            endFontSize: titleEndFontSize,
+          },
+          tagline: {
+            startX: vw / 2,
+            startY: vh / 2 + logoStartSize / 2 + 20,
+            startFontSize: taglineStartFontSize,
+            endX: vw - 32 - 150,
+            endY: 35,
+            endFontSize: taglineEndFontSize,
+          },
+        };
+      }
+
+      function lerp(start, end, t) {
+        return start + (end - start) * t;
+      }
+
+      function easeInOutCubic(t) {
+        return t < 0.5
+          ? 4 * t * t * t
+          : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
+
+      function handleScroll() {
+        const scrollY = window.scrollY;
+        const rawProgress = Math.min(Math.max(scrollY / animationDistance, 0), 1);
+        const progress = easeInOutCubic(rawProgress);
+
+        const p = positions;
+
+        // Logo animation
+        const logoX = lerp(p.logo.startX, p.logo.endX, progress);
+        const logoY = lerp(p.logo.startY, p.logo.endY, progress);
+        const logoSize = lerp(p.logo.startSize, p.logo.endSize, progress);
+
+        heroLogo.style.left = `${logoX}px`;
+        heroLogo.style.top = `${logoY}px`;
+        heroLogo.style.width = `${logoSize}px`;
+        heroLogo.style.transform = `translate(-50%, -50%)`;
+
+        // Title animation
+        const titleX = lerp(p.title.startX, p.title.endX, progress);
+        const titleY = lerp(p.title.startY, p.title.endY, progress);
+        const titleFontSize = lerp(p.title.startFontSize, p.title.endFontSize, progress);
+
+        heroTitle.style.left = `${titleX}px`;
+        heroTitle.style.top = `${titleY}px`;
+        heroTitle.style.fontSize = `${titleFontSize}px`;
+        heroTitle.style.transform = `translate(-50%, -50%)`;
+
+        // Tagline animation
+        const taglineX = lerp(p.tagline.startX, p.tagline.endX, progress);
+        const taglineY = lerp(p.tagline.startY, p.tagline.endY, progress);
+        const taglineFontSize = lerp(p.tagline.startFontSize, p.tagline.endFontSize, progress);
+
+        heroTagline.style.left = `${taglineX}px`;
+        heroTagline.style.top = `${taglineY}px`;
+        heroTagline.style.fontSize = `${taglineFontSize}px`;
+        heroTagline.style.transform = `translate(-50%, -50%)`;
+
+        // Header background and line animation
+        if (progress >= 1) {
+          header.classList.add("complete");
+        } else {
+          header.classList.remove("complete");
+        }
+      }
+
+      // Intersection Observer for section animations
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.15,
+      };
+
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      sections.forEach((section) => {
+        sectionObserver.observe(section);
+      });
+
+      // Scroll handler with RAF
+      let ticking = false;
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              handleScroll();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        },
+        { passive: true }
+      );
+
+      // Recalculate on resize
+      window.addEventListener("resize", () => {
+        calculatePositions();
+        handleScroll();
+      });
+
+      // Initial setup
+      calculatePositions();
+      handleScroll();
+    </script>
+  </body>
+</html>
