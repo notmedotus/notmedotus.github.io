@@ -686,10 +686,9 @@
         const vw = window.innerWidth;
         const vh = window.innerHeight;
 
-        // Animation completes when first content section reaches header
-        // Hero is 100vh, main has 4rem padding top, so content starts at 100vh + 4rem
-        // We want animation done when that content is at ~70px from top
-        animationDistance = vh - 70 + 64; // 64px = 4rem padding
+        // Animation completes when content is closer to header
+        // Increased distance = longer animation = content closer to top when done
+        animationDistance = vh + 40;
 
         // Starting sizes (centered in viewport)
         const logoStartSize = vw <= 768 ? 200 : 300;
@@ -700,7 +699,7 @@
         const taglineEndSize = 11.2;
 
         // Calculate starting Y positions (vertically centered as a group)
-        const groupHeight = logoStartSize + 24 + 24; // logo + title gap + tagline gap
+        const groupHeight = logoStartSize + 24 + 24;
         const groupStartY = vh / 2 - groupHeight / 2;
 
         positions = {
@@ -728,6 +727,8 @@
             endY: 35,
             endSize: taglineEndSize,
           },
+          // Line max width with padding on both sides
+          lineMaxWidth: vw - 64,
         };
       }
 
@@ -775,14 +776,15 @@
         heroTagline.style.fontSize = taglineSize + "px";
         heroTagline.style.transform = "translate(-50%, -50%)";
 
-        // Header line - starts at 40% progress, completes at 100%
-        const lineStartProgress = 0.4;
+        // Header line - starts at 30% progress, completes at 100%
+        // Uses pixel width with padding so line doesn't touch elements
+        const lineStartProgress = 0.3;
         const lineProgress = Math.min(
           Math.max((rawProgress - lineStartProgress) / (1 - lineStartProgress), 0),
           1
         );
-        const lineWidth = easeOutQuart(lineProgress) * 100;
-        headerLine.style.width = lineWidth + "%";
+        const lineWidthPx = easeOutQuart(lineProgress) * p.lineMaxWidth;
+        headerLine.style.width = lineWidthPx + "px";
 
         // Header background - only when animation is complete
         if (rawProgress >= 1 && !animationComplete) {
@@ -829,8 +831,21 @@
         handleScroll();
       });
 
+      // Initialize positions and handle scroll state
       calculatePositions();
       handleScroll();
+
+      // Handle page load when scrolled (browser restores scroll position after DOMContentLoaded)
+      window.addEventListener("load", () => {
+        calculatePositions();
+        handleScroll();
+      });
+
+      // Fallback for browsers that restore scroll position late
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+        window.scrollTo(0, 0);
+      }
     </script>
   </body>
 </html>
