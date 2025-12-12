@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>One Third Party</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- favicon: “⅓” rendered via inline SVG -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>⅓</text></svg>"
+    />
+
+    <!-- Lato font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ---------- Reset ---------- */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: "Lato", sans-serif;
+        background: #d2b48c;
+        color: #222;
+        overflow-x: hidden;
+      }
+
+      /* ---------- Noise Background ---------- */
+      #bg-noise {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+      }
+
+      /* ---------- Initial Splash ---------- */
+      .splash {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+        transition: all 1.2s ease-in-out;
+      }
+
+      .splash.shrink {
+        height: 80px;
+        align-items: flex-start;
+        justify-content: center;
+        padding-left: 3rem;
+        background: rgba(210, 180, 140, 0.95);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Logo ⅓ */
+      .logo {
+        width: 100px;
+        height: auto;
+        transition: all 1s ease-in-out;
+        user-select: none;
+      }
+
+      .splash.shrink .logo {
+        width: 40px;
+        transform: translateY(0);
+      }
+
+      /* Taglines */
+      .taglines {
+        transition: opacity 0.8s ease-in-out, transform 1s ease-in-out;
+      }
+
+      .splash.shrink .taglines {
+        opacity: 0;
+        transform: translateY(-20px);
+        pointer-events: none;
+      }
+
+      .tagline--primary {
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .tagline--sub {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      /* ---------- Main Content ---------- */
+      main {
+        margin-top: 100vh;
+        transition: margin-top 1.2s ease;
+      }
+
+      section {
+        padding: 6rem 10%;
+        min-height: 60vh;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      section:nth-child(even) {
+        flex-direction: row-reverse;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      section img {
+        max-width: 45%;
+        height: auto;
+        border-radius: 6px;
+        object-fit: cover;
+        flex: 1 1 40%;
+      }
+
+      section .text {
+        flex: 1 1 50%;
+      }
+
+      h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        line-height: 1.6;
+        font-size: 1rem;
+      }
+
+      footer {
+        text-align: center;
+        padding: 3rem;
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- noise filter -->
+    <svg id="bg-noise" xmlns="http://www.w3.org/2000/svg">
+      <filter id="noiseFilter">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.8"
+          numOctaves="2"
+          stitchTiles="stitch"
+        />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0
+                  0 0 0 0 0
+                  0 0 0 0 0
+                  0 0 0 0.2 0"
+        />
+      </filter>
+      <rect
+        width="100%"
+        height="100%"
+        fill="#d2b48c"
+        filter="url(#noiseFilter)"
+      />
+    </svg>
+
+    <!-- Splash / Header -->
+    <div class="splash" id="splash">
+      <img
+        class="logo"
+        src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
+        alt="⅓"
+      />
+      <div class="taglines">
+        <div class="tagline--primary">One&nbsp;Third&nbsp;Party</div>
+        <div class="tagline--sub">
+          A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Page Content -->
+    <main>
+      <section>
+        <img
+          src="https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=1000"
+          alt="placeholder"
+        />
+        <div class="text">
+          <h2>Our Vision</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+            vitae justo ac velit cursus rhoncus. Quisque bibendum purus at
+            mauris tempor, vel blandit magna facilisis. Donec vitae turpis
+            ullamcorper, pharetra nulla ut, pulvinar orci.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <img
+          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1000"
+          alt="placeholder"
+        />
+        <div class="text">
+          <h2>Community in Action</h2>
+          <p>
+            Integer sit amet fringilla metus. Phasellus porttitor est eu augue
+            mattis, non sagittis magna sagittis. Nam id lorem erat. Aenean nec
+            scelerisque eros. Donec id sapien orci. Sed iaculis libero in dolor
+            tincidunt, quis condimentum mi pellentesque.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <img
+          src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000"
+          alt="placeholder"
+        />
+        <div class="text">
+          <h2>Building a Future</h2>
+          <p>
+            Nunc bibendum, mi in tincidunt commodo, odio metus porta eros, id
+            feugiat leo odio nec dolor. Sed laoreet, augue vitae commodo
+            efficitur, dui felis pulvinar enim, nec venenatis sapien risus nec
+            orci.
+          </p>
+        </div>
+      </section>
+
+      <footer>
+        © 2025 One Third Party — A Plurality for Peace and Justice
+      </footer>
+    </main>
+
+    <script>
+      // Animate splash into header on scroll
+      const splash = document.getElementById("splash");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > window.innerHeight * 0.25) {
+          splash.classList.add("shrink");
+        } else {
+          splash.classList.remove("shrink");
+        }
+      });
+    </script>
+  </body>
+</html>
