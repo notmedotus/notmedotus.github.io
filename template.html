@@ -63,11 +63,6 @@
         background: #222;
         z-index: 1002;
         transform: translateX(-50%);
-        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .header-line.visible {
-        width: 100%;
       }
 
       /* ---------- header background (appears after animation) ---------- */
@@ -780,18 +775,22 @@
         heroTagline.style.fontSize = taglineSize + "px";
         heroTagline.style.transform = "translate(-50%, -50%)";
 
-        // Header background and line - only when animation is complete
+        // Header line - starts at 40% progress, completes at 100%
+        const lineStartProgress = 0.4;
+        const lineProgress = Math.min(
+          Math.max((rawProgress - lineStartProgress) / (1 - lineStartProgress), 0),
+          1
+        );
+        const lineWidth = easeOutQuart(lineProgress) * 100;
+        headerLine.style.width = lineWidth + "%";
+
+        // Header background - only when animation is complete
         if (rawProgress >= 1 && !animationComplete) {
           animationComplete = true;
           headerBg.classList.add("visible");
-          // Small delay for line to animate after bg appears
-          setTimeout(() => {
-            headerLine.classList.add("visible");
-          }, 50);
         } else if (rawProgress < 1 && animationComplete) {
           animationComplete = false;
           headerBg.classList.remove("visible");
-          headerLine.classList.remove("visible");
         }
       }
 
