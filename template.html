@@ -130,13 +130,20 @@
 
       /* ---------- main content ---------- */
       .main {
-        padding: 4rem 2rem;
-        max-width: 1400px;
-        margin: 0 auto;
+        padding: 0;
+        padding-top: 70px;
+        max-width: none;
+        margin: 0;
       }
 
+      /* ---------- sections ---------- */
       .section {
-        margin-bottom: 6rem;
+        min-height: calc(100vh - 70px);
+        padding: 4rem 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         opacity: 0;
         transform: translateY(40px);
         transition: opacity 0.8s ease, transform 0.8s ease;
@@ -145,6 +152,11 @@
       .section.visible {
         opacity: 1;
         transform: translateY(0);
+      }
+
+      .section-inner {
+        width: 100%;
+        max-width: 1400px;
       }
 
       .section-title {
@@ -174,9 +186,9 @@
         font-weight: 300;
       }
 
+      /* ---------- intro ---------- */
       .intro {
         text-align: center;
-        padding: 4rem 0;
       }
 
       .intro .section-title::after {
@@ -189,7 +201,8 @@
         text-align: center;
       }
 
-      .two-col {
+      /* ---------- two column ---------- */
+      .two-col .section-inner {
         display: grid;
         grid-template-columns: 1fr;
         gap: 3rem;
@@ -197,7 +210,7 @@
       }
 
       @media (min-width: 768px) {
-        .two-col {
+        .two-col .section-inner {
           grid-template-columns: 1fr 1fr;
         }
       }
@@ -225,6 +238,7 @@
         color: rgba(34, 34, 34, 0.5);
       }
 
+      /* ---------- cards ---------- */
       .cards {
         display: grid;
         grid-template-columns: 1fr;
@@ -282,13 +296,47 @@
         line-height: 1.7;
       }
 
+      /* ---------- stats ---------- */
+      .stats .section-inner {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        text-align: center;
+        padding: 3rem 0;
+        border-top: 2px solid #222;
+        border-bottom: 2px solid #222;
+      }
+
+      @media (min-width: 768px) {
+        .stats .section-inner {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 300;
+      }
+
+      /* ---------- banner ---------- */
       .banner {
         background: #222;
         color: #d2b48c;
-        padding: 5rem 2rem;
+        width: 100%;
+        max-width: none;
+      }
+
+      .banner .section-inner {
         text-align: center;
-        margin-left: -2rem;
-        margin-right: -2rem;
       }
 
       .banner .section-title {
@@ -324,6 +372,7 @@
         color: #222;
       }
 
+      /* ---------- gallery ---------- */
       .image-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -359,41 +408,10 @@
         grid-row: span 2;
       }
 
-      .stats {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
-        text-align: center;
-        padding: 3rem 0;
-        border-top: 2px solid #222;
-        border-bottom: 2px solid #222;
-      }
-
-      @media (min-width: 768px) {
-        .stats {
-          grid-template-columns: repeat(4, 1fr);
-        }
-      }
-
-      .stat-number {
-        font-size: 3rem;
-        font-weight: 700;
-        line-height: 1;
-        margin-bottom: 0.5rem;
-      }
-
-      .stat-label {
-        font-size: 0.75rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        font-weight: 300;
-      }
-
-      .testimonial {
-        text-align: center;
-        padding: 4rem 2rem;
+      /* ---------- testimonial ---------- */
+      .testimonial .section-inner {
         max-width: 800px;
-        margin: 0 auto;
+        text-align: center;
       }
 
       .testimonial-quote {
@@ -429,6 +447,7 @@
         margin-top: 0.25rem;
       }
 
+      /* ---------- footer ---------- */
       .footer {
         background: #222;
         color: #d2b48c;
@@ -487,16 +506,10 @@
   </head>
 
   <body>
-    <!-- Simple CSS noise background instead of SVG -->
     <div class="noise-bg"></div>
-
-    <!-- Header background - only shown after animation complete -->
     <div class="header-bg" id="headerBg"></div>
-
-    <!-- Header line - animates in at the end -->
     <div class="header-line" id="headerLine"></div>
 
-    <!-- Hero elements - these animate to become the header -->
     <section class="hero" id="hero">
       <img
         class="hero-logo"
@@ -508,148 +521,165 @@
       <div class="hero-tagline" id="heroTagline">A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice</div>
     </section>
 
-    <!-- Main Content -->
     <main class="main">
       <section class="section intro">
-        <h2 class="section-title">Things Are Not O.K.</h2>
-        <p class="section-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore.
-        </p>
+        <div class="section-inner">
+          <h2 class="section-title">Our Mission</h2>
+          <p class="section-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore.
+          </p>
+        </div>
       </section>
 
       <section class="section two-col">
-        <div class="col-content">
-          <h2 class="section-title">Building Together</h2>
-          <p class="section-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </p>
-          <p class="section-text" style="margin-top: 1rem">
-            Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-            cupidatat non proident.
-          </p>
+        <div class="section-inner">
+          <div class="col-content">
+            <h2 class="section-title">Building Together</h2>
+            <p class="section-text">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+              ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+              aliquip ex ea commodo consequat.
+            </p>
+            <p class="section-text" style="margin-top: 1rem">
+              Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+              cupidatat non proident.
+            </p>
+          </div>
+          <div class="col-image">Image Placeholder</div>
         </div>
-        <div class="col-image">Image Placeholder</div>
       </section>
 
       <section class="section two-col two-col--reverse">
-        <div class="col-content">
-          <h2 class="section-title">Our Approach</h2>
-          <p class="section-text">
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum. Sed ut perspiciatis
-            unde omnis iste natus error sit voluptatem accusantium doloremque
-            laudantium.
-          </p>
-          <p class="section-text" style="margin-top: 1rem">
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-            fugit, sed quia consequuntur magni dolores eos qui ratione
-            voluptatem sequi nesciunt.
-          </p>
+        <div class="section-inner">
+          <div class="col-content">
+            <h2 class="section-title">Our Approach</h2>
+            <p class="section-text">
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+              officia deserunt mollit anim id est laborum. Sed ut perspiciatis
+              unde omnis iste natus error sit voluptatem accusantium doloremque
+              laudantium.
+            </p>
+            <p class="section-text" style="margin-top: 1rem">
+              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
+              fugit, sed quia consequuntur magni dolores eos qui ratione
+              voluptatem sequi nesciunt.
+            </p>
+          </div>
+          <div class="col-image">Image Placeholder</div>
         </div>
-        <div class="col-image">Image Placeholder</div>
       </section>
 
       <section class="section">
-        <h2 class="section-title" style="margin-bottom: 2.5rem">Core Principles</h2>
-        <div class="cards">
-          <div class="card">
-            <div class="card-icon">01</div>
-            <h3 class="card-title">Principle One</h3>
-            <p class="card-text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </p>
-          </div>
-          <div class="card">
-            <div class="card-icon">02</div>
-            <h3 class="card-title">Principle Two</h3>
-            <p class="card-text">
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
-          </div>
-          <div class="card">
-            <div class="card-icon">03</div>
-            <h3 class="card-title">Principle Three</h3>
-            <p class="card-text">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur.
-            </p>
+        <div class="section-inner">
+          <h2 class="section-title" style="margin-bottom: 2.5rem">Core Principles</h2>
+          <div class="cards">
+            <div class="card">
+              <div class="card-icon">01</div>
+              <h3 class="card-title">Principle One</h3>
+              <p class="card-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card-icon">02</div>
+              <h3 class="card-title">Principle Two</h3>
+              <p class="card-text">
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card-icon">03</div>
+              <h3 class="card-title">Principle Three</h3>
+              <p class="card-text">
+                Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       <section class="section stats">
-        <div class="stat">
-          <div class="stat-number">50+</div>
-          <div class="stat-label">Communities</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">10K</div>
-          <div class="stat-label">Members</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">33%</div>
-          <div class="stat-label">Growth Rate</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">∞</div>
-          <div class="stat-label">Possibilities</div>
+        <div class="section-inner">
+          <div class="stat">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Communities</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">10K</div>
+            <div class="stat-label">Members</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">33%</div>
+            <div class="stat-label">Growth Rate</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Possibilities</div>
+          </div>
         </div>
       </section>
 
       <section class="section banner">
-        <h2 class="section-title">Join the Movement</h2>
-        <p class="section-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Together,
-          we can build a future founded on peace, justice, and plurality.
-        </p>
-        <a href="#" class="banner-cta">Get Involved</a>
+        <div class="section-inner">
+          <h2 class="section-title">Join the Movement</h2>
+          <p class="section-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Together,
+            we can build a future founded on peace, justice, and plurality.
+          </p>
+          <a href="#" class="banner-cta">Get Involved</a>
+        </div>
       </section>
 
       <section class="section">
-        <h2 class="section-title" style="margin-bottom: 2.5rem">Gallery</h2>
-        <div class="image-grid">
-          <div class="grid-item grid-item--large">Large Image</div>
-          <div class="grid-item">Image 1</div>
-          <div class="grid-item">Image 2</div>
-          <div class="grid-item">Image 3</div>
-          <div class="grid-item">Image 4</div>
-          <div class="grid-item">Image 5</div>
-          <div class="grid-item">Image 6</div>
+        <div class="section-inner">
+          <h2 class="section-title" style="margin-bottom: 2.5rem">Gallery</h2>
+          <div class="image-grid">
+            <div class="grid-item grid-item--large">Large Image</div>
+            <div class="grid-item">Image 1</div>
+            <div class="grid-item">Image 2</div>
+            <div class="grid-item">Image 3</div>
+            <div class="grid-item">Image 4</div>
+            <div class="grid-item">Image 5</div>
+            <div class="grid-item">Image 6</div>
+          </div>
         </div>
       </section>
 
       <section class="section testimonial">
-        <blockquote class="testimonial-quote">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation.
-        </blockquote>
-        <div class="testimonial-author">Jane Doe</div>
-        <div class="testimonial-role">Community Leader</div>
+        <div class="section-inner">
+          <blockquote class="testimonial-quote">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation.
+          </blockquote>
+          <div class="testimonial-author">Jane Doe</div>
+          <div class="testimonial-role">Community Leader</div>
+        </div>
       </section>
 
       <section class="section two-col">
-        <div class="col-content">
-          <h2 class="section-title">Looking Forward</h2>
-          <p class="section-text">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-            quae ab illo inventore veritatis et quasi architecto beatae vitae
-            dicta sunt explicabo.
-          </p>
+        <div class="section-inner">
+          <div class="col-content">
+            <h2 class="section-title">Looking Forward</h2>
+            <p class="section-text">
+              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+              quae ab illo inventore veritatis et quasi architecto beatae vitae
+              dicta sunt explicabo.
+            </p>
+          </div>
+          <div class="col-image">Image Placeholder</div>
         </div>
-        <div class="col-image">Image Placeholder</div>
       </section>
     </main>
 
@@ -686,19 +716,15 @@
         const vw = window.innerWidth;
         const vh = window.innerHeight;
 
-        // Animation completes when content is closer to header
-        // Increased distance = longer animation = content closer to top when done
         animationDistance = vh + 40;
 
-        // Starting sizes (centered in viewport)
         const logoStartSize = vw <= 768 ? 200 : 300;
-        const logoEndSize = 55;
+        const logoEndSize = 50;
         const titleStartSize = vw <= 768 ? 17.6 : 24;
         const titleEndSize = 17.6;
         const taglineStartSize = vw <= 768 ? 9.6 : 12;
         const taglineEndSize = 11.2;
 
-        // Calculate starting Y positions (vertically centered as a group)
         const groupHeight = logoStartSize + 24 + 24;
         const groupStartY = vh / 2 - groupHeight / 2;
 
@@ -727,7 +753,6 @@
             endY: 35,
             endSize: taglineEndSize,
           },
-          // Line max width with padding on both sides
           lineMaxWidth: vw,
         };
       }
@@ -749,7 +774,6 @@
 
         const p = positions;
 
-        // Logo
         const logoX = lerp(p.logo.startX, p.logo.endX, progress);
         const logoY = lerp(p.logo.startY, p.logo.endY, progress);
         const logoSize = lerp(p.logo.startSize, p.logo.endSize, progress);
@@ -758,7 +782,6 @@
         heroLogo.style.width = logoSize + "px";
         heroLogo.style.transform = "translate(-50%, -50%)";
 
-        // Title
         const titleX = lerp(p.title.startX, p.title.endX, progress);
         const titleY = lerp(p.title.startY, p.title.endY, progress);
         const titleSize = lerp(p.title.startSize, p.title.endSize, progress);
@@ -767,7 +790,6 @@
         heroTitle.style.fontSize = titleSize + "px";
         heroTitle.style.transform = "translate(-50%, -50%)";
 
-        // Tagline
         const taglineX = lerp(p.tagline.startX, p.tagline.endX, progress);
         const taglineY = lerp(p.tagline.startY, p.tagline.endY, progress);
         const taglineSize = lerp(p.tagline.startSize, p.tagline.endSize, progress);
@@ -776,17 +798,14 @@
         heroTagline.style.fontSize = taglineSize + "px";
         heroTagline.style.transform = "translate(-50%, -50%)";
 
-        // Header line - starts at 30% progress, completes at 100%
-        // Uses pixel width with padding so line doesn't touch elements
         const lineStartProgress = 0.45;
         const lineProgress = Math.min(
           Math.max((rawProgress - lineStartProgress) / (1 - lineStartProgress), 0),
           1
         );
-        const lineWidthPx = easeOutQuart(lineProgress) * p.lineMaxWidth;
-        headerLine.style.width = lineWidthPx + "px";
+        const lineWidth = easeOutQuart(lineProgress) * 100;
+        headerLine.style.width = lineWidth + "%";
 
-        // Header background - only when animation is complete
         if (rawProgress >= 1 && !animationComplete) {
           animationComplete = true;
           headerBg.classList.add("visible");
@@ -796,7 +815,6 @@
         }
       }
 
-      // Section observer
       const sectionObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -810,7 +828,6 @@
 
       sections.forEach((section) => sectionObserver.observe(section));
 
-      // Scroll with RAF
       let ticking = false;
       window.addEventListener(
         "scroll",
@@ -831,17 +848,14 @@
         handleScroll();
       });
 
-      // Initialize positions and handle scroll state
       calculatePositions();
       handleScroll();
 
-      // Handle page load when scrolled (browser restores scroll position after DOMContentLoaded)
       window.addEventListener("load", () => {
         calculatePositions();
         handleScroll();
       });
 
-      // Fallback for browsers that restore scroll position late
       if ("scrollRestoration" in history) {
         history.scrollRestoration = "manual";
         window.scrollTo(0, 0);
