@@ -30,7 +30,8 @@
       }
 
       html {
-        scroll-behavior: smooth;
+        scroll-snap-type: y mandatory;
+        scroll-padding-top: 70px;
       }
 
       body {
@@ -85,6 +86,8 @@
       .hero {
         height: 100vh;
         position: relative;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
       }
 
       .hero-logo {
@@ -147,6 +150,8 @@
         opacity: 0;
         transform: translateY(40px);
         transition: opacity 0.8s ease, transform 0.8s ease;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
       }
 
       .section.visible {
@@ -453,6 +458,7 @@
         color: #d2b48c;
         padding: 4rem 2rem;
         text-align: center;
+        scroll-snap-align: start;
       }
 
       .footer-logo {
