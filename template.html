@@ -5,14 +5,14 @@
     <title>One Third Party</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- favicon: “⅓” rendered via inline SVG -->
+    <!-- favicon: “⅓” -->
     <link
       rel="icon"
       type="image/svg+xml"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>⅓</text></svg>"
     />
 
-    <!-- Lato font -->
+    <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -40,114 +40,140 @@
         overflow-x: hidden;
       }
 
-      /* ---------- Noise Background ---------- */
+      /* ---------- Background Noise ---------- */
       #bg-noise {
         position: fixed;
         inset: 0;
         z-index: -1;
       }
 
-      /* ---------- Initial Splash ---------- */
+      /* ---------- Splash Container ---------- */
       .splash {
+        position: relative;
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100vh;
         text-align: center;
-        transition: all 1.2s ease-in-out;
-      }
-
-      .splash.shrink {
-        height: 80px;
-        align-items: flex-start;
-        justify-content: center;
-        padding-left: 3rem;
-        background: rgba(210, 180, 140, 0.95);
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 10;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      }
-
-      /* Logo ⅓ */
-      .logo {
-        width: 100px;
-        height: auto;
+        gap: 0.8rem;
         transition: all 1s ease-in-out;
-        user-select: none;
       }
 
-      .splash.shrink .logo {
-        width: 40px;
-        transform: translateY(0);
+      /* Logo Styling */
+      .logo {
+        width: 40vw;
+        max-width: 320px;
+        transition: all 1s ease-in-out;
       }
 
       /* Taglines */
-      .taglines {
-        transition: opacity 0.8s ease-in-out, transform 1s ease-in-out;
-      }
-
-      .splash.shrink .taglines {
-        opacity: 0;
-        transform: translateY(-20px);
-        pointer-events: none;
-      }
-
       .tagline--primary {
         font-size: 1.5rem;
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
       }
-
       .tagline--sub {
         font-size: 0.75rem;
         letter-spacing: 2px;
         text-transform: uppercase;
       }
 
-      /* ---------- Main Content ---------- */
+      /* ---------- Header Bar (after shrink) ---------- */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2rem;
+        height: 80px;
+        background: rgba(210, 180, 140, 0.9);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+        opacity: 0;
+        transform: translateY(-100%);
+        transition: all 0.8s ease-in-out;
+      }
+
+      header.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      header .logo-small {
+        width: 40px;
+        height: auto;
+      }
+
+      nav a {
+        color: #222;
+        text-decoration: none;
+        margin-left: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      /* ---------- Content Sections ---------- */
       main {
-        margin-top: 100vh;
-        transition: margin-top 1.2s ease;
+        background: transparent;
       }
 
       section {
-        padding: 6rem 10%;
-        min-height: 60vh;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        justify-content: center;
         gap: 2rem;
+        padding: 5rem 10%;
+        min-height: 70vh;
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        opacity: 0;
+        transform: translateY(40px);
       }
 
+      /* Alternating layout background variation */
       section:nth-child(even) {
-        flex-direction: row-reverse;
         background: rgba(255, 255, 255, 0.2);
+        flex-direction: row-reverse;
+      }
+
+      section.visible {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       section img {
-        max-width: 45%;
+        max-width: 420px;
+        width: 45%;
         height: auto;
-        border-radius: 6px;
+        border-radius: 8px;
         object-fit: cover;
         flex: 1 1 40%;
       }
 
       section .text {
-        flex: 1 1 50%;
+        flex: 1 1 45%;
       }
 
       h2 {
-        font-size: 1.75rem;
+        font-size: 1.8rem;
         margin-bottom: 1rem;
       }
 
       p {
-        line-height: 1.6;
         font-size: 1rem;
+        line-height: 1.6;
       }
 
       footer {
@@ -156,11 +182,24 @@
         font-size: 0.9rem;
         opacity: 0.8;
       }
+
+      @media (max-width: 768px) {
+        .logo {
+          max-width: 200px;
+        }
+        section {
+          flex-direction: column;
+          text-align: center;
+        }
+        section img {
+          width: 100%;
+        }
+      }
     </style>
   </head>
 
   <body>
-    <!-- noise filter -->
+    <!-- background noise filter -->
     <svg id="bg-noise" xmlns="http://www.w3.org/2000/svg">
       <filter id="noiseFilter">
         <feTurbulence
@@ -185,24 +224,35 @@
       />
     </svg>
 
-    <!-- Splash / Header -->
+    <!-- Splash -->
     <div class="splash" id="splash">
       <img
         class="logo"
         src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
         alt="⅓"
       />
-      <div class="taglines">
-        <div class="tagline--primary">One&nbsp;Third&nbsp;Party</div>
-        <div class="tagline--sub">
-          A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice
-        </div>
+      <div class="tagline tagline--primary">One&nbsp;Third&nbsp;Party</div>
+      <div class="tagline tagline--sub">
+        A&nbsp;Plurality&nbsp;for&nbsp;Peace&nbsp;and&nbsp;Justice
       </div>
     </div>
 
-    <!-- Main Page Content -->
+    <!-- Header Bar -->
+    <header id="header">
+      <img
+        class="logo-small"
+        src="https://upload.wikimedia.org/wikipedia/commons/d/d0/U%2B2153.svg"
+        alt="⅓"
+      />
+      <nav>
+        <a href="#vision">Vision</a>
+        <a href="#community">Community</a>
+        <a href="#future">Future</a>
+      </nav>
+    </header>
+
     <main>
-      <section>
+      <section id="vision">
         <img
           src="https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=1000"
           alt="placeholder"
@@ -218,7 +268,7 @@
         </div>
       </section>
 
-      <section>
+      <section id="community">
         <img
           src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1000"
           alt="placeholder"
@@ -234,7 +284,7 @@
         </div>
       </section>
 
-      <section>
+      <section id="future">
         <img
           src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000"
           alt="placeholder"
@@ -256,14 +306,37 @@
     </main>
 
     <script>
-      // Animate splash into header on scroll
       const splash = document.getElementById("splash");
+      const header = document.getElementById("header");
+      const sections = document.querySelectorAll("section");
 
+      // reveal animation for content sections when visible
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+
+      sections.forEach((section) => observer.observe(section));
+
+      // scroll-based splash transition
       window.addEventListener("scroll", () => {
-        if (window.scrollY > window.innerHeight * 0.25) {
-          splash.classList.add("shrink");
+        const scrollY = window.scrollY;
+        const trigger = window.innerHeight * 0.3;
+
+        if (scrollY > trigger) {
+          splash.style.transform = "translateY(-100vh)";
+          splash.style.opacity = "0";
+          header.classList.add("active");
         } else {
-          splash.classList.remove("shrink");
+          splash.style.transform = "translateY(0)";
+          splash.style.opacity = "1";
+          header.classList.remove("active");
         }
       });
     </script>
